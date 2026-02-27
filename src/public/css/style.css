@@ -679,3 +679,68 @@ tr:hover td {
 .mb-3 {
     margin-bottom: 1.5rem;
 }
+
+/* ─── RESPONSIVE MÓVIL ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* NAV */
+    nav {
+        padding: 1rem 1.2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    /* HERO */
+    .hero {
+        padding: 3rem 1.2rem 2rem;
+    }
+
+    .hero-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* LABS SECTION */
+    .labs-section {
+        padding: 1.5rem 1.2rem 4rem;
+    }
+
+    .labs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* CONTAINER */
+    .container {
+        margin: 1rem;
+        padding: 1.2rem;
+    }
+
+    /* FOOTER */
+    footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.2rem;
+        text-align: center;
+    }
+
+    /* TABLAS */
+    table {
+        font-size: 0.75rem;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+
+    /* BOTONES */
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
