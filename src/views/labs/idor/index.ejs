@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+
+  
+
+    <h1>Laboratorio IDOR (Insecure Direct Object Reference)</h1>
+
+
+    <h3>
+      Modo actual:
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <a href="/labs/idor/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    <p>Bienvenido al laboratorio de IDOR (Insecure Direct Object Reference). En este laboratorio podrás experimentar con la vulnerabilidad IDOR, que consiste en 
+      manipular accesos a recursos mediante entradas maliciosas, pudiendo asi acceder a cuentas sin autorización.
+      Prueba a acceder a la página de perfil de alguno de los usuarios de la base de datos, como 
+      <pre><code>http://localhost:3000/labs/idor/profile?id=1</code></pre> 
+        <pre><code>http://localhost:3000/labs/idor/profile?id=3</code></pre> 
+      y cambia el parametro <code>id</code> para acceder a perfiles de otros usuarios.</p>
+
+
+    <hr>
+
+    <p>Aquí están los perfiles de los usuarios de la base de datos:</p>
+
+    <p>
+    <a href="/labs/idor/profile?id=1" class="btn">Entrar como Admin</a>
+    <a href="/labs/idor/profile?id=2" class="btn">Entrar como User</a>
+    <a href="/labs/idor/profile?id=3" class="btn">Entrar como Guest</a>
+    </p>
+
+    <p>Prueba a cambiar el parametro <code>id</code> de la URL para acceder a perfiles de otros usuarios desde la página de perfil de un usuario.</p>
+
+    <hr>
+
+    <p><a href="/labs/idor/code" class="btn">Mostrar código vulnerable</a></p>
+    
+    <a href="/" class="btn">Volver</a>
+
+  
+</body>
+</html>

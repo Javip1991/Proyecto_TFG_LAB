@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+
+    
+
+    <h1>Laboratorio IDOR (Insecure Direct Object Reference)</h1>
+
+    <h3>Perfil de usuario <%= user.id %></h3>
+
+    <% if (idorExploited) { %>
+        <div class="alert-danger">
+            ⚠️ Vulnerabilidad IDOR explotada: has accedido a perfil de otro usuario modificando el ID en la URL.
+            </div>
+            <% } %>
+
+<p><strong>ID:</strong> <%= user.id %></p>
+<p><strong>Nombre de usuario:</strong> <%= user.username %></p>
+<p><strong>Contraseña:</strong> <%= user.password %></p>
+<p><strong>Correo electrónico:</strong> <%= user.email %></p>
+
+<a href="/labs/idor" class="btn">🔙 Volver</a>
+    
+    
+</body>
+</html>

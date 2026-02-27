@@ -1,0 +1,681 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+:root {
+    --bg: #090d0f;
+    --surface: #0e1417;
+    --border: #1a2a2a;
+    --green: #00ff88;
+    --green-dim: #00ff8833;
+    --green-mid: #00cc66;
+    --red: #ff3a3a;
+    --yellow: #ffd700;
+    --blue: #00bfff;
+    --blue-dark: #009acd;
+    --text: #c8d8d0;
+    --text-dim: #567060;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Rajdhani', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}   
+
+/* ─── BODY & BACKGROUND ─────────────────────────────────────────── */
+body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+            rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0.05) 4px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ─── NAV ────────────────────────────────────────────────────────── */
+nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(9, 13, 15, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+    font-family: var(--mono);
+    font-size: 1.2rem;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: 2px;
+    margin-right: 0;
+}
+
+.nav-logo span {
+    color: var(--text-dim);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 1px;
+    margin-right: 0;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--green);
+    text-decoration: none;
+}
+
+/* ─── HERO ───────────────────────────────────────────────────────── */
+.hero {
+    position: relative;
+    z-index: 2;
+    padding: 6rem 3rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--green);
+    letter-spacing: 3px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+}
+
+.hero h1 em {
+    font-style: italic;
+    color: var(--green);
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    font-family: var(--mono);
+}
+
+.hero-stats>div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.stat-num {
+    font-size: 2rem;
+    color: var(--green);
+    display: block;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ─── LABS SECTION ───────────────────────────────────────────────── */
+.labs-section {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 3rem 6rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-header h2 {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ─── LAB CARDS ──────────────────────────────────────────────────── */
+.labs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.lab-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+    height: 220px;
+}
+
+.lab-card:hover {
+    border-color: var(--green);
+    transform: translateY(-3px);
+}
+
+.lab-card-inner {
+    padding: 1.8rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: opacity 0.3s;
+}
+
+.lab-card:hover .lab-card-inner {
+    opacity: 0;
+}
+
+.lab-card-hover {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0a1a10, #0e1e14);
+    border-top: 2px solid var(--green);
+    padding: 1.8rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.lab-card:hover .lab-card-hover {
+    opacity: 1;
+}
+
+.lab-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.lab-name {
+    font-family: var(--sans);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.lab-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+}
+
+.lab-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+}
+
+.badge-facil {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--green);
+    border: 1px solid var(--green-mid);
+}
+
+.badge-medio {
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--yellow);
+    border: 1px solid var(--yellow);
+}
+
+.badge-dificil {
+    background: rgba(255, 58, 58, 0.1);
+    color: var(--red);
+    border: 1px solid var(--red);
+}
+
+.lab-desc {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.6;
+    font-family: var(--sans);
+    flex: 1;
+    margin-bottom: 1rem;
+}
+
+.lab-link {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 0;
+    transition: gap 0.2s;
+}
+
+.lab-link:hover {
+    gap: 0.8rem;
+    text-decoration: none;
+    color: var(--green);
+}
+
+.dict-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+    height: 220px;
+    }
+
+.dict-card:hover {
+    opacity: 1;
+    border-color: var(--green);
+    transform: translateY(-3px);
+
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────── */
+footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ─── CONTAINER (labs) ───────────────────────────────────────────── */
+.container {
+    position: relative;
+    z-index: 2;
+    max-width: 750px;
+    margin: 2rem auto;
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── LINKS ─────────────────────────────────────────────────────── */
+a {
+    color: var(--green);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-right: 15px;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--green-mid);
+    text-decoration: underline;
+}
+
+/* ─── BUTTONS ────────────────────────────────────────────────────── */
+.btn {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 8px 16px;
+    cursor: pointer;
+    margin: 5px 0;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: var(--green-dim);
+    box-shadow: 0 0 10px var(--green-dim);
+    text-decoration: none;
+}
+
+/* ─── HEADINGS ───────────────────────────────────────────────────── */
+h1 {
+    font-family: var(--sans);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-family: var(--sans);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+h3 {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+h4 {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+}
+
+/* ─── CODE & PRE ─────────────────────────────────────────────────── */
+pre {
+    background: #060a0c;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    padding: 1rem;
+    border-radius: 3px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--green);
+    line-height: 1.6;
+}
+
+code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--green);
+    background: #060a0c;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+
+/* ─── FORMS & INPUTS ─────────────────────────────────────────────── */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+    background: #060a0c;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 8px var(--green-dim);
+}
+
+/* ─── TABLES ─────────────────────────────────────────────────────── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    margin: 1rem 0;
+}
+
+th {
+    background: #060a0c;
+    color: var(--green);
+    padding: 10px 14px;
+    text-align: left;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--green-mid);
+}
+
+td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+tr:hover td {
+    background: var(--green-dim);
+}
+
+/* ─── ALERTS ─────────────────────────────────────────────────────── */
+.alert-danger {
+    background: rgba(255, 58, 58, 0.1);
+    color: var(--red);
+    border: 1px solid var(--red);
+    border-left: 4px solid var(--red);
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background: rgba(0, 255, 136, 0.08);
+    color: var(--green);
+    border: 1px solid var(--green-mid);
+    border-left: 4px solid var(--green);
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+/* ─── SUCCESS / FAILURE ──────────────────────────────────────────── */
+.success {
+    color: var(--green);
+    font-weight: bold;
+    font-family: var(--mono);
+}
+
+.failure {
+    color: var(--red);
+    font-weight: bold;
+    font-family: var(--mono);
+}
+
+.msg-box {
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+
+.msg-success {
+    background: rgba(0, 255, 136, 0.08);
+    color: var(--green);
+    border-color: var(--green-mid);
+    border-left-color: var(--green);
+}
+
+.msg-error {
+    background: rgba(255, 58, 58, 0.1);
+    color: var(--red);
+    border-color: var(--red);
+    border-left-color: var(--red);
+}
+
+.msg-warning {
+    background: rgba(255, 215, 0, 0.08);
+    color: var(--yellow);
+    border-color: var(--yellow);
+    border-left-color: var(--yellow);
+}
+
+/* ─── MODE INDICATORS (NO MODIFICAR) ────────────────────────────── */
+.mode-vulnerable {
+    color: red;
+    font-weight: bold;
+}
+
+.mode-secure {
+    color: green;
+    font-weight: bold;
+}
+
+/* ─── UTILITY ────────────────────────────────────────────────────── */
+.text-mono {
+    font-family: var(--mono);
+}
+
+.text-dim {
+    color: var(--text-dim);
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mt-3 {
+    margin-top: 1.5rem;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}

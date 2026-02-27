@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title><%= title || "Laboratorio Broken Authentication" %></title>
+  </head>
+  <body>
+
+
+
+    <h1>Laboratorio Broken Authentication</h1>
+
+    <% if (typeof isVulnerableSuccess !== 'undefined' && isVulnerableSuccess) { %>
+  <div class="alert-danger">
+    ⚠️ Vulnerabilidad explotada: el sistema no verifica la contraseña.
+  </div>
+<% } %>
+
+<% if (typeof lastResult !== 'undefined') { %>
+  <h4>Resultado:</h4>
+  <pre class="<%= lastResult.includes('fallido') ? 'failure' : 'success' %>">
+<%= lastResult %>
+  </pre>
+<% } %>
+
+    <h3>
+      Modo actual:
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <a href="/labs/broken-auth/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    <p>Bienvenido al laboratorio de Broken Authentication (BA). En este laboratorio podrás experimentar con la vulnerabilidad BA, que consiste en 
+    manipular logins mediante entradas maliciosas, pudiendo asi acceder a cuentas sin autorización.
+    esta vulnerabilidad es especialmente peligrosa porque puede permitir a un atacante acceder a información sensible o realizar acciones en nombre de otros usuarios.
+
+      <h4>🔐 Pasos para explotar la vulnerabilidad:</h4>
+
+    Prueba a introducir en el formulario de abajo algunos textos como: 
+
+ <table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Username</th>
+    <th>Password</th>
+  </tr>
+  <tr>
+    <td><code>user1</code></td>
+    <td><code>cualquiera</code></td>
+  </tr>
+  <tr>
+    <td><code>admin</code></td>
+    <td><code>cualquiera</code></td>
+  </tr>
+
+         </table>
+
+    y verás cómo se comporta la página al introducir estas credenciales. Despues de varios intentos fallidos, la cuenta se bloqueará y no podrás acceder a ella.</p>
+
+    <p>Tambien puedes probar a introducir en el login las credenciales reales de usuarios que ya estan en la base de datos para ver como se comporta la pagina.</p>
+    
+         <table border="1" cellpadding="8" cellspacing="0">
+          <tr>
+            <th>Username</th>
+            <th>Password</th>
+          </tr>
+          <tr>
+            <td><code>admin</code></td>
+            <td><code>123456</code></td>
+          </tr>
+          <tr>
+            <td><code>user1</code></td>
+            <td><code>password</code></td>
+          </tr>
+
+         </table>
+
+
+    <hr>
+
+    <form action="/labs/broken-auth/auth" method="POST">
+      <label>Username:</label><br>
+      <input type="text" name="username" required /><br><br>
+
+      <label>Password:</label><br>
+      <input type="password" name="password" required /><br><br>
+
+      <button type="submit" class="btn">Iniciar sesión</button>
+    </form>
+
+    <% if (typeof lastResult !== 'undefined') { %>
+      <h4>Resultado:</h4>
+      <pre class="<%= lastResult.includes('fallido') ? 'failure' : 'success' %>">
+        <%= lastResult %>
+      </pre>
+
+      <% if (typeof explanation !== 'undefined') { %>
+      <h4>Explicación técnica:</h4>
+     <pre><%= explanation %></pre>
+      <% } %>
+
+    <% } %>
+    <hr>
+
+    <p><a href="/labs/broken-auth/code" class="btn">Mostrar código vulnerable</a></p>
+    <a href="/" class="btn">Volver</a>
+
+   
+  </body>
+</html>

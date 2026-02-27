@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Panel de Administración</title>
+</head>
+<body>
+  <div class="container">
+
+    <h1>🔐 Panel de Administración</h1>
+
+    <h3>
+      Modo actual:
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <hr>
+
+    <% if (jwtExploited) { %>
+      <div style="background:rgba(255,58,58,0.1);color:var(--red);border:1px solid var(--red);border-left:4px solid var(--red);padding:15px;border-radius:3px;margin-bottom:1.5rem;">
+        <strong>🚨 ¡Vulnerabilidad JWT explotada!</strong><br>
+        Has accedido al panel de administración manipulando tu token JWT.
+        En un entorno real, esto permitiría acceso completo al sistema.
+      </div>
+    <% } else { %>
+      <div class="alert-success">
+        ✅ Acceso legítimo al panel de administración.
+      </div>
+    <% } %>
+
+    <h3>// Token decodificado</h3>
+    <pre><%= payload %></pre>
+
+    <hr>
+
+    <h3>// Datos sensibles del sistema</h3>
+    <table>
+      <tr><th>Usuario</th><th>Email</th><th>Rol</th><th>Último acceso</th></tr>
+      <tr><td>admin</td><td>admin@cyberlab.com</td><td>admin</td><td>Hace 5 min</td></tr>
+      <tr><td>user1</td><td>user@cyberlab.com</td><td>user</td><td>Ahora</td></tr>
+      <tr><td>jsmith</td><td>jsmith@cyberlab.com</td><td>user</td><td>Hace 2h</td></tr>
+    </table>
+
+    <hr>
+
+    <a href="/labs/jwt" class="btn">🔙 Volver al laboratorio</a>
+
+  </div>
+</body>
+</html>

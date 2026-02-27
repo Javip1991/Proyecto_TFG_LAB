@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Login Vulnerable SQLi</title>
+  </head>
+  <body>
+
+    
+
+    <h1>Login Vulnerable SQL Injection</h1>
+
+    <% if (typeof isVulnerableSuccess !== 'undefined' && isVulnerableSuccess) { %>
+  <div class="alert-danger">
+    ⚠️ Vulnerabilidad explotada: la inyección SQL ha permitido el bypass del login.
+  </div>
+<% } %>
+
+<h3>
+  Modo actual:
+  <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+    <%= mode.toUpperCase() %>
+  </span>
+</h3>
+
+    <!-- Botón para cambiar modo -->
+    <a href="/labs/sqli/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    <hr>
+
+    <p>Bienvenido al laboratorio de SQL Injection (SQLi). En este laboratorio podrás experimentar con la vulnerabilidad SQL Injection, que consiste en 
+      manipular consultas SQL mediante entradas maliciosas, pudiendo asi 
+      acceder a datos sensibles o incluso ejecutar comandos en la base de datos.
+
+      <h4>💉 Pasos para explotar la vulnerabilidad:</h4>
+
+      Prueba a introducir en el formulario de abajo algunos textos como:
+
+         <table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Email</th>
+    <th>Password</th>
+  </tr>
+  <tr>
+    <td><code>' OR '1'='1 </code></td>
+    <td><code>123</code></td>
+  </tr>
+  <tr>
+    <td><code>' OR 1=1 --  </code></td>
+    <td><code>123</code></td>
+  </tr>
+
+         </table>
+
+         y verás cómo se comporta la página al introducir estos payloads en modo <strong>VULNERABLE</strong> y en modo <strong>SEGURO</strong>.</p>
+
+         <p>Tambien puedes probar a introducir en el login las credenciales reales de usuarios que ya estan en la base de datos para ver como se comporta la pagina.</p>
+
+         <table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Email</th>
+    <th>Password</th>
+  </tr>
+  <tr>
+    <td><code>user@lab.com</code></td>
+    <td><code>user123</code></td>
+  </tr>
+  <tr>
+    <td><code>boss@lab.com</code></td>
+    <td><code>boss123</code></td>
+  </tr>
+
+         </table>
+
+         <hr>
+
+    <!-- Formulario de login -->
+    <form action="/labs/sqli/login" method="POST">
+      <label>Email:</label><br>
+      <input type="text" name="email" required /><br><br>
+
+      <label>Password:</label><br>
+      <input type="password" name="password" required /><br><br>
+
+      <button type="submit" class="btn">Iniciar sesión</button>
+    </form>
+
+    <hr>
+
+    <!-- Mostrar query ejecutada -->
+    <% if (typeof lastQuery !== 'undefined') { %>
+      <h4>Query ejecutada:</h4>
+      <pre><%= lastQuery %></pre>
+    <% } %>
+
+    <!-- Mostrar resultado del login -->
+    <% if (typeof lastResult !== 'undefined') { %>
+      <h4>Resultado:</h4>
+      <pre class="<%= lastResult.includes('fallido') ? 'failure' : 'success' %>">
+<%= lastResult %>
+      </pre>
+    <% } %>
+
+    <hr>
+
+    <!-- Botones de acción -->
+    <p><a href="/labs/sqli/code" class="btn">Mostrar código vulnerable</a></p>
+    <a href="/" class="btn">Volver</a>
+
+    
+  </body>
+</html>

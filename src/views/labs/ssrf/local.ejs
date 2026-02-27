@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+</head>
+<body>
+
+
+
+  <h1>Laboratorio Server Side Request Forgery (SSRF)</h1>
+
+<h3>
+      Modo actual:
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <a href="/labs/ssrf/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    
+
+    <p>
+  Bienvenido al laboratorio de SSRF. En este laboratorio podrás experimentar cómo un atacante 
+  puede manipular las peticiones del servidor para acceder a recursos internos que normalmente 
+  estarían protegidos. 
+</p>
+
+<h4>🧪 URLs de ejemplo para probar:</h4>
+
+<p>Introduce una URL en el formulario y observa cómo responde el servidor.</p>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>URL</th>
+    <th>Qué demuestra</th>
+  </tr>
+  <tr>
+    <td><code>http://localhost:3000/labs/ssrf/secret</code></td>
+    <td>Acceso a un recurso interno básico</td>
+  </tr>
+  <tr>
+    <td><code>http://localhost:3000/labs/ssrf/secret/secret</code></td>
+    <td>Acceso a recursos internos más profundos</td>
+  </tr>
+  <tr>
+    <td><code>http://localhost:3000/labs/ssrf/secret/secret/secret</code></td>
+    <td>El servidor revela su IP pública haciendo una petición externa</td>
+  </tr>
+   <tr>
+    <td><code>http://localhost:3000/labs/ssrf/admin</code></td>
+    <td>Mismo ataque usando IP en vez de hostname</td>
+  </tr>
+</table>
+
+<p>💡 <strong>Pista:</strong> Cambia entre modo <strong>VULNERABLE</strong> y modo <strong>SEGURO</strong> para ver cómo una validación correcta puede prevenir el ataque.</p>
+
+<hr>
+<p></p>
+<form method="POST" action="/labs/ssrf/fetch-url">
+  <input type="text" name="url" placeholder="Introduce una URL" required>
+  
+  <button type="submit" class="btn">Consultar URL</button>
+  
+</form>
+
+<p></p>
+
+<% if (ssrfExploited) { %>
+  <div style="background:red;color:white;padding:10px;margin-top:20px;">
+    🚨 Vulnerabilidad SSRF explotada!
+    Has accedido a un recurso interno del servidor.
+  </div>
+<% } %>
+
+<% if (result) { %>
+  <div style="margin-top: 20px;">
+    <h3>Resultado:</h3>
+    <% if (result.includes('Acceso denegado')) { %>
+      <div style="background:#ff9800;color:white;padding:15px;border-radius:8px;font-weight:bold;">
+        🔒 <%= result %>
+      </div>
+    <% } else { %>
+      <div style="background:#1e1e1e;color:#00ff99;padding:15px;border-radius:8px;">
+        <pre style="margin:0;white-space:pre-wrap;word-break:break-all;"><%= result %></pre>
+      </div>
+    <% } %>
+  </div>
+<% } %>
+
+<hr>
+
+<p><a href="/labs/ssrf/code" class="btn">Mostrar código vulnerable</a></p>
+<a href="/" class="btn">Volver</a>
+
+
+</body>
+</html>

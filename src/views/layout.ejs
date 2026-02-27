@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= typeof title !== 'undefined' ? title : 'CyberLab' %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="nav-logo">CYBER<span>//</span>LAB</a>
+      <div class="nav-links">
+        <a href="/">INICIO</a>
+        <a href="/#labs">LABORATORIOS</a>
+        <a href="/Diccionario">DICCIONARIO</a>
+      </div>
+    </nav>
+
+    <div class="container"><%- body %></div>
+
+    <footer>
+      <span>CYBERLAB Javier Perea Gómez © 2025</span>
+      <span>SOLO USO EDUCATIVO - HAPPY HACKING</span>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title><%= title %></title>
+  </head>
+  <body>
+
+    <h1>Laboratorio XSS</h1>
+
+    <% if (typeof xssTriggered !== 'undefined' && xssTriggered) { %>
+  <div class="alert-danger">
+    ⚠️ Vulnerabilidad explotada: se ejecutó código malicioso (XSS).
+  </div>
+<% } %>
+
+    <h3>
+      Modo actual: 
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <!-- Botón para cambiar modo -->
+    <a href="/labs/xss/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    <hr>
+
+    <p>
+Bienvenido al laboratorio de XSS (Cross-Site Scripting).
+En este laboratorio podrás experimentar con la vulnerabilidad XSS, que permite a un atacante inyectar código malicioso (generalmente JavaScript) en páginas web vistas por otros usuarios,
+lo que puede llevar a robo de cookies, redirecciones maliciosas, o incluso control total del navegador de la víctima.
+
+<h4>💉 Pasos para explotar la vulnerabilidad:</h4>
+
+Prueba a introducir en el formulario de abajo algunos textos como <pre><code>&lt;input autofocus onfocus=alert('XSS')&gt;</code></pre>
+o <pre><code>&lt;img src=x onerror=alert('XSS')&gt;</code></pre> y verás cómo se comporta la página al introducir estos payloads.`</p>
+
+<hr>
+
+    <!-- Formulario -->
+    <form action="/labs/xss/submit" method="POST">
+      <label>Introduce un texto:</label><br>
+      <input type="text" name="userInput" value="<%= userInput %>" /><br><br>
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+
+
+    <!-- Resultado -->
+    <% if (result) { %>
+  <h4>Resultado:</h4>
+
+  <% if (mode === 'vulnerable') { %>
+    <div class="result"><%- result %></div>
+  <% } else { %>
+    <div class="result"><%= result %></div>
+  <% } %>
+
+<% } %>
+
+    <hr>
+
+    <!-- Botones de acción -->
+    <p><a href="/labs/xss/code" class="btn">Mostrar código vulnerable</a></p>
+    <a href="/" class="btn">Volver</a>
+
+    
+  </body>
+</html>

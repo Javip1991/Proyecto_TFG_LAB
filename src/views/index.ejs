@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberLab - Plataforma de aprendizaje</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="nav-logo">CYBER<span>//</span>LAB</a>
+      <div class="nav-links">
+        <a href="/">INICIO</a>
+        <a href="#labs">LABORATORIOS</a>
+        <a href="/Diccionario">DICCIONARIO</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-tag">PLATAFORMA ACTIVA</div>
+      <h1>Aprende hacking<br />practicando de forma <em>segura</em></h1>
+      <p>
+        Explora vulnerabilidades reales en un entorno controlado. Cada
+        laboratorio simula un ataque real para que puedas entender cómo
+        funcionan y cómo prevenirlos.
+      </p>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-num">6</span>
+          <span class="stat-label">Laboratorios</span>
+        </div>
+        <div>
+          <span class="stat-num">3</span>
+          <span class="stat-label">Modos</span>
+        </div>
+        <div>
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Práctica</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="labs-section" id="labs">
+      <div class="section-header">
+        <h2>// Laboratorios disponibles</h2>
+      </div>
+      <div id="labs-root"></div>
+    </section>
+
+    <footer>
+      <span>CYBERLAB Javier Perea Gómez © 2026</span>
+      <span>SOLO USO EDUCATIVO - HAPPY HACKING</span>
+    </footer>
+
+    <!-- React desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+    <script>
+      const { useState } = React;
+
+      const labs = [
+        {
+          name: "SQL Injection",
+          tag: "SQLi",
+          icon: "🗄️",
+          difficulty: "Fácil",
+          badge: "badge-facil",
+          desc: "Manipula consultas SQL para extraer datos de la base de datos, saltarte autenticaciones y comprender por qué las consultas parametrizadas son esenciales.",
+          url: "/labs/sqli",
+        },
+        {
+          name: "Cross-Site Scripting",
+          tag: "XSS",
+          icon: "💉",
+          difficulty: "Fácil",
+          badge: "badge-facil",
+          desc: "Inyecta scripts maliciosos en páginas web para robar cookies, redirigir usuarios o ejecutar código arbitrario en el navegador de la víctima.",
+          url: "/labs/xss",
+        },
+        {
+          name: "Broken Authentication",
+          tag: "BROKEN-AUTH",
+          icon: "🔐",
+          difficulty: "Fácil",
+          badge: "badge-facil",
+          desc: "Explota fallos en los mecanismos de autenticación y gestión de sesiones para acceder a cuentas sin credenciales válidas.",
+          url: "/labs/broken-auth",
+        },
+        {
+          name: "Insecure Direct Object Reference",
+          tag: "IDOR",
+          icon: "📂",
+          difficulty: "Fácil",
+          badge: "badge-facil",
+          desc: "Accede a objetos o recursos de otros usuarios simplemente modificando referencias directas en la URL o en los parámetros de la petición.",
+          url: "/labs/idor",
+        },
+        {
+          name: "Server-Side Request Forgery",
+          tag: "SSRF",
+          icon: "🌐",
+          difficulty: "Medio",
+          badge: "badge-medio",
+          desc: "Engaña al servidor para que realice peticiones a recursos internos inaccesibles desde el exterior, comprometiendo servicios internos.",
+          url: "/labs/ssrf",
+        },
+        {
+          name: "JSON Web Tokens",
+          tag: "JWT",
+          icon: "🔐",
+          difficulty: "Dificil",
+          badge: "badge-dificil",
+          desc: "Explota fallos en el mecanismo de autenticación y gestión de sesiones para acceder a cuentas sin credenciales válidas.",
+          url: "/labs/jwt",
+        },
+      ];
+
+      function LabCard({ lab }) {
+        const [hovered, setHovered] = useState(false);
+
+        return React.createElement(
+          "div",
+          {
+            className: "lab-card",
+            onMouseEnter: () => setHovered(true),
+            onMouseLeave: () => setHovered(false),
+          },
+          // Front
+          React.createElement(
+            "div",
+            { className: "lab-card-inner" },
+            React.createElement(
+              "div",
+              null,
+              React.createElement("div", { className: "lab-icon" }, lab.icon),
+              React.createElement("div", { className: "lab-name" }, lab.name),
+              React.createElement("div", { className: "lab-tag" }, lab.tag),
+            ),
+            React.createElement(
+              "span",
+              { className: `lab-badge ${lab.badge}` },
+              lab.difficulty,
+            ),
+          ),
+          // Hover
+          React.createElement(
+            "div",
+            { className: "lab-card-hover" },
+            React.createElement("p", { className: "lab-desc" }, lab.desc),
+            React.createElement(
+              "a",
+              { href: lab.url, className: "lab-link" },
+              "→ ENTRAR AL LAB",
+            ),
+          ),
+        );
+      }
+
+      function LabsGrid() {
+        return React.createElement(
+          "div",
+          { className: "labs-grid" },
+          labs.map((lab, i) => React.createElement(LabCard, { key: i, lab })),
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("labs-root"));
+      root.render(React.createElement(LabsGrid));
+    </script>
+  </body>
+</html>

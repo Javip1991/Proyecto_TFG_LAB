@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Código Vulnerable</title>
+  </head>
+  <body>
+    <h2><%= title || "Código del laboratorio" %></h2>
+
+    <pre><%= code %></pre>
+
+
+    <% if(explanation) { %>
+      <hr>
+      <h3>Explicación del laboratorio:</h3>
+      <pre><%= explanation %></pre>
+      <% } %>
+
+    <a href="<%= backLink || '/' %>" class="btn">Volver</a>
+  </body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberLab - Diccionario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="nav-logo">CYBER<span>//</span>LAB</a>
+      <div class="nav-links">
+        <a href="/">INICIO</a>
+        <a href="/#labs">LABORATORIOS</a>
+        <a href="/Diccionario" class="active">DICCIONARIO</a>
+      </div>
+    </nav>
+
+    <section class="hero" style="padding-bottom: 2rem">
+      <div class="hero-tag">REFERENCIA</div>
+      <h1>Diccionario de<br /><em>Ciberseguridad</em></h1>
+      <p>
+        Conceptos, vulnerabilidades y tipos de ataque explicados de forma clara.
+        Una referencia para entender el mundo de la seguridad informática.
+      </p>
+
+      <!-- Buscador -->
+      <div style="margin-top: 2rem">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Buscar concepto..."
+          style="
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            font-family: &quot;Share Tech Mono&quot;, monospace;
+            font-size: 1rem;
+            padding: 0.6rem 1.2rem;
+            width: 100%;
+            max-width: 420px;
+            outline: none;
+          "
+        />
+      </div>
+
+      <!-- Filtros por categoría -->
+      <div
+        id="filter-buttons"
+        style="
+          margin-top: 1.2rem;
+          display: flex;
+          gap: 0.6rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        "
+      ></div>
+    </section>
+
+    <section class="labs-section">
+      <div class="section-header">
+        <h2>// Conceptos y ataques</h2>
+      </div>
+      <div id="dict-root"></div>
+    </section>
+
+    <footer>
+      <span>CYBERLAB © 2025</span>
+      <span>ENTORNO CONTROLADO — SOLO USO EDUCATIVO</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+    <script>
+      const { useState, useEffect } = React;
+
+      const entries = [
+        // ── CONCEPTOS GENERALES ──────────────────────────────────────────
+        {
+          term: "Vulnerabilidad",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Debilidad en un sistema, aplicación o proceso que puede ser explotada por un atacante para comprometer la confidencialidad, integridad o disponibilidad del sistema.",
+        },
+        {
+          term: "Exploit",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Código o técnica que aprovecha una vulnerabilidad para causar un comportamiento no deseado en el sistema objetivo, como obtener acceso no autorizado o ejecutar comandos arbitrarios.",
+        },
+        {
+          term: "Vector de ataque",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Camino o método que utiliza un atacante para acceder a un sistema o red con el fin de ejecutar un ataque. Puede ser local (acceso físico) o remoto (a través de la red).",
+        },
+        {
+          term: "Superficie de ataque",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Conjunto de todos los puntos de entrada posibles a través de los cuales un atacante podría intentar introducirse en un sistema. Cuanto mayor es la superficie, mayor es el riesgo.",
+        },
+        {
+          term: "Zero-Day",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Vulnerabilidad desconocida para el fabricante o la comunidad de seguridad, por lo que no existe parche disponible. Los atacantes que la descubren tienen ventaja hasta que se publica y corrige.",
+        },
+        {
+          term: "Payload",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Parte de un exploit que ejecuta la acción maliciosa real, como abrir una shell, instalar un malware o exfiltrar datos. El resto del exploit simplemente entrega el payload al objetivo.",
+        },
+        {
+          term: "CVE",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Common Vulnerabilities and Exposures. Sistema de identificación pública de vulnerabilidades de seguridad conocidas. Cada CVE tiene un identificador único (ej: CVE-2021-44228) que permite referenciarla globalmente.",
+        },
+        {
+          term: "CVSS",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Common Vulnerability Scoring System. Sistema estandarizado para calificar la gravedad de una vulnerabilidad en una escala del 0 al 10, considerando factores como la complejidad de explotación y el impacto.",
+        },
+        {
+          term: "Pentesting",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Prueba de penetración. Evaluación autorizada de la seguridad de un sistema mediante la simulación de ataques reales, con el objetivo de identificar vulnerabilidades antes de que lo haga un atacante real.",
+        },
+        {
+          term: "OWASP Top 10",
+          tag: "CONCEPTO",
+          category: "General",
+          def: "Lista publicada por el Open Web Application Security Project con las diez vulnerabilidades más críticas en aplicaciones web. Es una referencia estándar en la industria para desarrolladores y equipos de seguridad.",
+        },
+
+        // ── ATAQUES WEB ──────────────────────────────────────────────────
+        {
+          term: "SQL Injection",
+          tag: "SQLi",
+          category: "Ataque Web",
+          def: "Inserción de sentencias SQL maliciosas en campos de entrada para manipular la base de datos subyacente. Permite extraer, modificar o eliminar datos, y en algunos casos ejecutar comandos en el sistema.",
+        },
+        {
+          term: "Cross-Site Scripting",
+          tag: "XSS",
+          category: "Ataque Web",
+          def: "Inyección de scripts maliciosos en páginas web que son servidas a otros usuarios. El navegador de la víctima ejecuta el script, lo que puede permitir robo de cookies, redirección o captura de pulsaciones de teclado.",
+        },
+        {
+          term: "Cross-Site Request Forgery",
+          tag: "CSRF",
+          category: "Ataque Web",
+          def: "Ataque que engaña al navegador autenticado de una víctima para enviar peticiones no deseadas a una aplicación web en la que está logueada, ejecutando acciones sin su consentimiento.",
+        },
+        {
+          term: "IDOR",
+          tag: "IDOR",
+          category: "Ataque Web",
+          def: "Insecure Direct Object Reference. Vulnerabilidad donde una aplicación usa referencias controladas por el usuario (IDs en URLs o parámetros) para acceder a objetos sin verificar que el usuario tenga permisos sobre ellos.",
+        },
+        {
+          term: "SSRF",
+          tag: "SSRF",
+          category: "Ataque Web",
+          def: "Server-Side Request Forgery. El atacante hace que el servidor realice peticiones HTTP en su nombre, accediendo a servicios internos inaccesibles desde el exterior, como metadatos de cloud o servicios internos.",
+        },
+        {
+          term: "Path Traversal",
+          tag: "PATH TRAV",
+          category: "Ataque Web",
+          def: "Técnica que usa secuencias como `../` en rutas de archivos para acceder a directorios fuera del directorio raíz permitido, pudiendo leer archivos sensibles del sistema como `/etc/passwd`.",
+        },
+        {
+          term: "XML External Entity",
+          tag: "XXE",
+          category: "Ataque Web",
+          def: "Ataque contra aplicaciones que procesan XML. Aprovecha entidades externas definidas en el XML para leer archivos del servidor, realizar SSRF o provocar denegación de servicio.",
+        },
+        {
+          term: "Broken Authentication",
+          tag: "BROKEN-AUTH",
+          category: "Ataque Web",
+          def: "Fallos en la implementación de autenticación y gestión de sesiones que permiten a atacantes comprometer contraseñas, tokens o sesiones para suplantar la identidad de otros usuarios.",
+        },
+        {
+          term: "JWT Attack",
+          tag: "JWT",
+          category: "Ataque Web",
+          def: "Explotación de fallos en la implementación de JSON Web Tokens. Incluye técnicas como cambiar el algoritmo a 'none', usar claves débiles o manipular el payload para escalar privilegios.",
+        },
+        {
+          term: "Open Redirect",
+          tag: "REDIRECT",
+          category: "Ataque Web",
+          def: "Vulnerabilidad donde una aplicación acepta una URL controlada por el usuario y redirige a ella sin validación. Se usa en phishing para dar credibilidad a enlaces maliciosos mediante dominios legítimos.",
+        },
+        {
+          term: "Host Header Injection",
+          tag: "HOST INJ",
+          category: "Ataque Web",
+          def: "Manipulación de la cabecera HTTP Host para engañar a la aplicación y realizar ataques como envenenamiento de caché, reset de contraseñas maliciosas o SSRF.",
+        },
+
+        // ── RED Y PROTOCOLO ───────────────────────────────────────────────
+        {
+          term: "Man-in-the-Middle",
+          tag: "MitM",
+          category: "Red",
+          def: "El atacante se interpone en la comunicación entre dos partes para interceptar, leer o modificar el tráfico en tiempo real, sin que ninguna de las partes lo detecte.",
+        },
+        {
+          term: "DNS Spoofing",
+          tag: "DNS",
+          category: "Red",
+          def: "Envenenamiento de la caché DNS para redirigir el tráfico de un dominio legítimo hacia un servidor controlado por el atacante, facilitando phishing o intercepción de tráfico.",
+        },
+        {
+          term: "ARP Spoofing",
+          tag: "ARP",
+          category: "Red",
+          def: "Envío de mensajes ARP falsos en una red local para asociar la MAC del atacante con la IP de otro host, permitiendo interceptar el tráfico destinado a ese host (base del MitM en redes LAN).",
+        },
+        {
+          term: "DoS / DDoS",
+          tag: "DoS",
+          category: "Red",
+          def: "Denial of Service / Distributed DoS. Ataque que satura los recursos de un sistema o red para que deje de estar disponible para usuarios legítimos. En DDoS se usan múltiples máquinas coordinadas (botnet).",
+        },
+        {
+          term: "Port Scanning",
+          tag: "SCAN",
+          category: "Red",
+          def: "Técnica de reconocimiento para identificar puertos abiertos en un host y los servicios que escuchan en ellos. Herramientas como Nmap son estándar para esta tarea en pentesting.",
+        },
+
+        // ── RECONOCIMIENTO ─────────────────────────────────────────────
+
+        {
+          term: "Port Scanning",
+          tag: "SCAN",
+          category: "Reconocimiento",
+          def: "Técnica de reconocimiento para identificar puertos abiertos en un host y los servicios que escuchan en ellos. Herramientas como Nmap son estándar para esta tarea en pentesting.",
+        },
+        {
+          term: "Subdomain Enumeration",
+          tag: "ENUM",
+          category: "Reconocimiento",
+          def: "Técnica de reconocimiento para enumerar subdominios de un dominio. Herramientas como Amass y Sublist3r son estándar para esta tarea en pentesting.",
+        },
+        {
+          term: "OSINT",
+          tag: "OSINT",
+          category: "Reconocimiento",
+          def: "Open Source Intelligence. Recolección de información a partir de fuentes públicas (redes sociales, registros públicos, etc.) para obtener datos sobre un objetivo antes de un ataque.",
+        },
+        {
+          term: "Footprinting",
+          tag: "FOOTPRINT",
+          category: "Reconocimiento",
+          def: "Proceso de recopilación de información sobre un sistema o red objetivo para identificar posibles puntos débiles. Incluye técnicas como escaneo de puertos, enumeración de servicios y recolección de datos públicos.",
+        },
+        {
+          term: "DNS Enumeration",
+          tag: "DNS",
+          category: "Reconocimiento",
+          def: "Proceso de enumeración de subdominios y dominios utilizando herramientas como Amass y Sublist3r.",
+        },
+
+        // ── INGENIERÍA SOCIAL ─────────────────────────────────────────────
+        {
+          term: "Phishing",
+          tag: "PHISHING",
+          category: "Ingeniería Social",
+          def: "Suplantación de identidad mediante correos, SMS o webs falsas que imitan entidades legítimas para engañar a la víctima y robar credenciales, datos bancarios u otra información sensible.",
+        },
+        {
+          term: "Spear Phishing",
+          tag: "SPEAR",
+          category: "Ingeniería Social",
+          def: "Variante del phishing altamente dirigida a un individuo u organización específica, usando información personalizada para aumentar la credibilidad del engaño.",
+        },
+        {
+          term: "Pretexting",
+          tag: "PRXTNG",
+          category: "Ingeniería Social",
+          def: "El atacante crea un escenario ficticio (pretexto) para manipular a la víctima y obtener información o acceso. Por ejemplo, hacerse pasar por soporte técnico o un compañero de trabajo.",
+        },
+        {
+          term: "Baiting",
+          tag: "BAIT",
+          category: "Ingeniería Social",
+          def: "Ataque que usa un cebo físico o digital (como un USB abandonado o una descarga gratuita) para que la víctima lo use y así ejecutar malware o comprometer el sistema.",
+        },
+
+        // ── MALWARE ───────────────────────────────────────────────────────
+        {
+          term: "Ransomware",
+          tag: "RANSOM",
+          category: "Malware",
+          def: "Tipo de malware que cifra los archivos de la víctima y exige un rescate (normalmente en criptomonedas) para entregar la clave de descifrado. Ejemplos conocidos: WannaCry, LockBit.",
+        },
+        {
+          term: "Keylogger",
+          tag: "KEYLOG",
+          category: "Malware",
+          def: "Software o hardware que registra todas las pulsaciones del teclado de la víctima, capturando contraseñas, mensajes y cualquier dato introducido sin que el usuario lo sepa.",
+        },
+        {
+          term: "Rootkit",
+          tag: "ROOTKIT",
+          category: "Malware",
+          def: "Conjunto de herramientas diseñadas para obtener y mantener acceso privilegiado a un sistema ocultando su presencia al sistema operativo y a las herramientas de seguridad.",
+        },
+        {
+          term: "Backdoor",
+          tag: "BACKDOOR",
+          category: "Malware",
+          def: "Acceso oculto instalado en un sistema (a veces intencionadamente por el fabricante, otras por un atacante) que permite eludir la autenticación normal y mantener acceso persistente.",
+        },
+      ];
+
+      // Extraer categorías únicas
+      const categories = ["Todas", ...new Set(entries.map((e) => e.category))];
+
+      function DictCard({ entry }) {
+        return React.createElement(
+          "div",
+          { className: "dict-card", style: { cursor: "default" } },
+          React.createElement(
+            "div",
+            { className: "lab-card-inner" },
+            React.createElement(
+              "div",
+              null,
+              React.createElement("div", { className: "lab-name" }, entry.term),
+              React.createElement("div", { className: "lab-tag" }, entry.tag),
+              React.createElement(
+                "p",
+                {
+                  style: {
+                    fontSize: "0.82rem",
+                    opacity: 0.75,
+                    marginTop: "0.8rem",
+                    lineHeight: "1.5",
+                    fontFamily: "'Share Tech Mono', monospace",
+                  },
+                },
+                entry.def,
+              ),
+            ),
+            React.createElement(
+              "span",
+              {
+                className: "lab-badge badge-facil",
+                style: { marginTop: "1rem", alignSelf: "flex-start" },
+              },
+              entry.category,
+            ),
+          ),
+        );
+      }
+
+      function Dictionary() {
+        const [search, setSearch] = useState("");
+        const [activeCategory, setActiveCategory] = useState("Todas");
+
+        // Sincronizar con el input nativo del DOM
+        useEffect(() => {
+          const input = document.getElementById("search-input");
+          if (!input) return;
+          const handler = (e) => setSearch(e.target.value);
+          input.addEventListener("input", handler);
+          return () => input.removeEventListener("input", handler);
+        }, []);
+
+        // Renderizar botones de filtro
+        useEffect(() => {
+          const container = document.getElementById("filter-buttons");
+          if (!container) return;
+          container.innerHTML = "";
+          categories.forEach((cat) => {
+            const btn = document.createElement("button");
+            btn.textContent = cat;
+            btn.style.cssText = `
+              background: ${activeCategory === cat ? "var(--accent, #00ff88)" : "transparent"};
+              color: ${activeCategory === cat ? "#000" : "var(--text, #fff)"};
+              border: 1px solid var(--accent, #00ff88);
+              font-family: 'Share Tech Mono', monospace;
+              font-size: 0.78rem;
+              padding: 0.35rem 0.9rem;
+              cursor: pointer;
+              letter-spacing: 0.05em;
+            `;
+            btn.addEventListener("click", () => setActiveCategory(cat));
+            container.appendChild(btn);
+          });
+        }, [activeCategory]);
+
+        const filtered = entries.filter((e) => {
+          const matchCat =
+            activeCategory === "Todas" || e.category === activeCategory;
+          const matchSearch =
+            e.term.toLowerCase().includes(search.toLowerCase()) ||
+            e.def.toLowerCase().includes(search.toLowerCase()) ||
+            e.tag.toLowerCase().includes(search.toLowerCase());
+          return matchCat && matchSearch;
+        });
+
+        return React.createElement(
+          "div",
+          null,
+          filtered.length === 0
+            ? React.createElement(
+                "p",
+                {
+                  style: {
+                    opacity: 0.5,
+                    fontFamily: "'Share Tech Mono', monospace",
+                    textAlign: "center",
+                    padding: "2rem",
+                  },
+                },
+                "// No se encontraron resultados",
+              )
+            : React.createElement(
+                "div",
+                { className: "labs-grid" },
+                filtered.map((entry, i) =>
+                  React.createElement(DictCard, { key: i, entry }),
+                ),
+              ),
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("dict-root"));
+      root.render(React.createElement(Dictionary));
+    </script>
+  </body>
+</html>

