@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>CRUD Usuarios — SQLi Lab</title>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Gestión de Usuarios</h1>
+    <h4>Lab SQL Injection — Base de datos real</h4>
+
+    <hr>
+
+    <% if (success) { %>
+      <div class="alert-success">✅ <%= success %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="alert-danger">❌ <%= error %></div>
+    <% } %>
+
+    <!-- ── CREAR USUARIO ── -->
+    <h2>Crear usuario</h2>
+
+    <form action="/labs/sqli/users/create" method="POST">
+      <label><h4>Email</h4></label>
+      <input type="text" name="email" placeholder="nuevo@usuario.com" required />
+      <br><br>
+      <label><h4>Password</h4></label>
+      <input type="text" name="password" placeholder="password123" required />
+      <br><br>
+      <button type="submit" class="btn">+ Crear usuario</button>
+    </form>
+
+    <hr>
+
+    <!-- ── TABLA USUARIOS ── -->
+    <h2>Usuarios en la base de datos</h2>
+
+    <% if (users.length === 0) { %>
+      <p class="text-dim text-mono">// No hay usuarios en la tabla.</p>
+    <% } else { %>
+      <% if (users.length === 0) { %>
+  <p class="text-dim text-mono">// No hay usuarios en la tabla.</p>
+<% } else { %>
+  <% users.forEach(user => { %>
+  <div class="user-card">
+    <div class="user-card-info">
+      <span class="user-field"><span class="user-label">ID<hr></span> <%= user.id %></span>
+      <span class="user-field"><span class="user-label">Email<hr></span> <%= user.email %></span>
+      <span class="user-field"><span class="user-label">Password<hr></span> <%= user.password %></span>
+    </div>
+    <div class="user-card-actions">
+      <form action="/labs/sqli/users/update/<%= user.id %>" method="POST" class="crud-form">
+        <input type="text" name="email" value="<%= user.email %>" required />
+        <input type="text" name="password" value="<%= user.password %>" required />
+        <button type="submit" class="btn btn-sm">Guardar</button>
+      </form>
+      <form action="/labs/sqli/users/delete/<%= user.id %>" method="POST"
+            onsubmit="return confirm('¿Eliminar a <%= user.email %>?')">
+        <button type="submit" class="btn btn-delete">Eliminar</button>
+      </form>
+    </div>
+  </div>
+  <% }) %>
+<% } %>
+    <% } %>
+
+    <hr>
+
+    <a href="/labs/sqli" class="btn">← Volver al lab</a>
+
+  </div>
+
+</body>
+</html>

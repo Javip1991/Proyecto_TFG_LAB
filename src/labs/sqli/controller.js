@@ -126,10 +126,91 @@ Este laboratorio muestra una vulnerabilidad de SQL Injection.
   });   
 };
 
+// ─── CRUD ────────────────────────────────────────────────────────────────────
+
+// GET /labs/sqli/users — lista todos los usuarios
+const usersPage = async (req, res) => {
+  try {
+    const users = await sequelize.query(
+      "SELECT * FROM lab_sqli_users ORDER BY id ASC",
+      { type: QueryTypes.SELECT }
+    );
+    res.render("labs/sqli/users", {
+      users,
+      success: req.query.success || null,
+      error: req.query.error || null,
+    });
+  } catch (error) {
+    console.error("ERROR CRUD:", error);
+    res.redirect("/labs/sqli/users?error=Error al cargar usuarios");
+  }
+};
+
+// POST /labs/sqli/users/create
+const createUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.redirect("/labs/sqli/users?error=Email y password son obligatorios");
+  }
+
+  try {
+    await sequelize.query(
+      "INSERT INTO lab_sqli_users (email, password) VALUES (:email, :password)",
+      { replacements: { email, password }, type: QueryTypes.INSERT }
+    );
+    res.redirect("/labs/sqli/users?success=Usuario creado correctamente");
+  } catch (error) {
+    console.error("ERROR CREATE:", error);
+    res.redirect("/labs/sqli/users?error=Error al crear usuario (puede que el email ya exista)");
+  }
+};
+
+// POST /labs/sqli/users/update/:id
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.redirect("/labs/sqli/users?error=Email y password son obligatorios");
+  }
+
+  try {
+    await sequelize.query(
+      "UPDATE lab_sqli_users SET email = :email, password = :password WHERE id = :id",
+      { replacements: { email, password, id }, type: QueryTypes.UPDATE }
+    );
+    res.redirect("/labs/sqli/users?success=Usuario actualizado correctamente");
+  } catch (error) {
+    console.error("ERROR UPDATE:", error);
+    res.redirect("/labs/sqli/users?error=Error al actualizar usuario");
+  }
+};
+
+// POST /labs/sqli/users/delete/:id
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await sequelize.query(
+      "DELETE FROM lab_sqli_users WHERE id = :id",
+      { replacements: { id }, type: QueryTypes.DELETE }
+    );
+    res.redirect("/labs/sqli/users?success=Usuario eliminado correctamente");
+  } catch (error) {
+    console.error("ERROR DELETE:", error);
+    res.redirect("/labs/sqli/users?error=Error al eliminar usuario");
+  }
+};
+
 // --- Exportar funciones correctamente ---
 module.exports = {
   loginPage,
   loginSubmit,
   showCode,
   switchMode,
+  usersPage,
+  createUser,
+  updateUser,
+  deleteUser,
 };
