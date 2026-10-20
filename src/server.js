@@ -17,6 +17,7 @@ async function start() {
     });
   } catch (error) {
     console.error("Unable to connect to DB:", error);
+    process.exit(1);
   }
 }
 

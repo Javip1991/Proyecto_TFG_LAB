@@ -10,6 +10,7 @@ const expressLayouts = require("express-ejs-layouts");
 const axios = require("axios");
 
 const app = express();
+app.set("trust proxy", 1);
 
 // --- Log inicial para debug ---
 console.log("✅ app.js cargado correctamente");
@@ -26,9 +27,9 @@ app.use(cors());
 // --- Configuración de sesiones ---
 app.use(
   session({
-    secret: "cyberlab_secret",
+    secret: process.env.SESSION_SECRET || "cyberlab_secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 
@@ -54,6 +55,10 @@ app.set("layouts", "layout");
 // --- Servir archivos estáticos ---
 // Por ejemplo: CSS, JS, imágenes, assets
 app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK"); // Para probar que todo funciona bien
+});
 
 // --- Ruta principal (inicio) ---
 
