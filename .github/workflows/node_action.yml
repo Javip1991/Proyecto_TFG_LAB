@@ -1,3 +1,4 @@
+
 name: Node.js Package
 
 on:
@@ -19,7 +20,12 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm test
+
+      - name: Run automated tests
+        run: npm test
+        env:
+          DATABASE_URL: postgres://test:test@127.0.0.1:5432/cyberlab_test
+          SESSION_SECRET: test-only-session-secret
 
   publish-npm:
     if: github.event_name == 'release'
