@@ -75,8 +75,8 @@ const brokenAuthRouter = require("./labs/broken-auth/router");
 app.use("/labs/broken-auth", require("./labs/broken-auth/router"));
 const idorRouter = require("./labs/idor/router");
 app.use("/labs/idor", idorRouter);
-const ssrfRouter = require("./labs/ssrf/router");
-app.use("/labs/ssrf", ssrfRouter);
+//const ssrfRouter = require("./labs/ssrf/router");
+//app.use("/labs/ssrf", ssrfRouter);
 const jwtRouter = require("./labs/jwt/router");
 app.use("/labs/jwt", jwtRouter);
 
