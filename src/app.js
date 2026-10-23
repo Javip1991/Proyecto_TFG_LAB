@@ -16,10 +16,49 @@ app.set("trust proxy", 1);
 console.log("✅ app.js cargado correctamente");
 
 // --- Seguridad básica ---
-app.use(helmet({
-  contentSecurityPolicy: false  // Desactivamos CSP para facilitar la explotación en los labs, pero en producción siempre debe estar habilitado{
+//app.use(helmet({
+  //contentSecurityPolicy: false  // Desactivamos CSP para facilitar la explotación en los labs, pero en producción siempre debe estar habilitado{
     
-}));
+  // --- Seguridad HTTP con Helmet ---
+// CSP habilitada para toda la aplicación excepto el laboratorio XSS.
+// La excepción permite conservar el ejercicio educativo vulnerable.
+
+// --- Seguridad básica: Helmet y CSP ---
+
+const helmetWithCsp = helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+    },
+  },
+});
+
+const helmetWithoutCsp = helmet({
+  contentSecurityPolicy: false,
+});
+
+// Desactivamos solo la CSP en el laboratorio XSS
+// para permitir las pruebas educativas de ese laboratorio.
+app.use((req, res, next) => {
+  const isXssLab = req.path.startsWith("/labs/xss");
+
+  if (isXssLab) {
+    return helmetWithoutCsp(req, res, next);
+  }
+
+  return helmetWithCsp(req, res, next);
+});
+
+app.use((req, res, next) => {
+  const isXssLab = req.path.startsWith("/labs/xss");
+
+  const securityMiddleware = isXssLab
+    ? helmetWithoutCsp
+    : helmetWithCsp;
+
+  securityMiddleware(req, res, next);
+});
+
 
 // --- CORS para futuro frontend o APIs ---
 app.use(cors());
